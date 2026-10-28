@@ -82,7 +82,7 @@
                     Portal del Huelguista: <span class="text-red-500">Información y Derechos</span>
                 </h2>
                 <p class="text-gray-300 text-sm sm:text-base leading-relaxed">
-                    Calcula el impacto exacto en tu nómina basándote en tu Salario Bruto Anual (SBA) y tu jornada, conoce tus derechos frente a abusos de la empresa y reporta directamente cualquier incidencia a la Sección Sindical de CGT.
+                    Calcula el impacto exacto en tu nómina basándote en el Salario Bruto Anual a 40h y tu jornada real de contrato, conoce tus derechos frente a abusos de la empresa y reporta directamente cualquier incidencia a la Sección Sindical de CGT.
                 </p>
             </div>
             <div class="absolute -right-12 -bottom-12 opacity-10 pointer-events-none text-red-600">
@@ -97,8 +97,8 @@
                     <i class="fa-solid fa-calculator text-xl"></i>
                 </div>
                 <div>
-                    <h2 class="text-2xl font-bold text-white">Calculadora por Salario Bruto Anual (SBA) y Jornada</h2>
-                    <p class="text-xs text-gray-400">Cálculo oficial adaptado a contratos a tiempo completo y parcial</p>
+                    <h2 class="text-2xl font-bold text-white">Calculadora por Salario Bruto Anual (SBA 40h) y Jornada Real</h2>
+                    <p class="text-xs text-gray-400">Ponderación automática del salario bruto según las horas semanales contratadas</p>
                 </div>
             </div>
 
@@ -109,34 +109,33 @@
                     <form id="strikeCalculatorForm" onsubmit="return false;" class="space-y-5">
                         <div>
                             <label class="block text-xs font-semibold text-gray-300 uppercase tracking-wider mb-2">
-                                Salario Bruto Anual (SBA) (€)
+                                Salario Bruto Anual a Tiempo Completo (40h) (€)
                             </label>
                             <div class="relative rounded-xl shadow-sm">
                                 <div class="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-gray-400">
                                     <i class="fa-solid fa-euro-sign"></i>
                                 </div>
-                                <input type="number" id="sbaInput" placeholder="Ej: 21000" min="0" step="50" required
+                                <input type="number" id="sbaInput" placeholder="Ej: 20475.90" min="0" step="0.01" value="20475.90" required
                                     class="w-full pl-10 pr-4 py-3 bg-gray-950 border border-gray-700 rounded-xl text-white placeholder-gray-500 focus:outline-none focus:border-red-500 focus:ring-1 focus:ring-red-500 text-base transition-colors">
                             </div>
                             <p class="text-[11px] text-gray-400 mt-1.5">
-                                Revisa tu última nómina o tu certificado de retenciones para obtener tu Bruto Anual.
+                                Introduce el Salario Bruto Anual de convenio fijado para 40 horas semanales.
                             </p>
                         </div>
 
-                        <!-- NUEVO CAMPO: Horas Semanales -->
                         <div>
                             <label class="block text-xs font-semibold text-gray-300 uppercase tracking-wider mb-2">
-                                Horas Semanales de Contrato
+                                Horas Semanales de tu Contrato
                             </label>
                             <div class="relative rounded-xl shadow-sm">
                                 <div class="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-gray-400">
                                     <i class="fa-solid fa-clock"></i>
                                 </div>
-                                <input type="number" id="weeklyHoursInput" value="40" min="1" max="40" step="1" required
+                                <input type="number" id="weeklyHoursInput" value="24.5" min="1" max="40" step="0.5" required
                                     class="w-full pl-10 pr-4 py-3 bg-gray-950 border border-gray-700 rounded-xl text-white focus:outline-none focus:border-red-500 focus:ring-1 focus:ring-red-500 text-base transition-colors">
                             </div>
                             <p class="text-[11px] text-gray-400 mt-1.5">
-                                Jornada completa habitual: 40h (o introduce tus horas semanales si estás a tiempo parcial).
+                                Si estás a tiempo parcial, introduce tus horas contratadas (ej. 24,5h, 30h, 32h...).
                             </p>
                         </div>
 
@@ -156,10 +155,10 @@
                         <div class="p-4 bg-gray-950 border border-gray-800 rounded-xl space-y-2 text-xs text-gray-300">
                             <div class="flex items-start gap-2 text-amber-400 font-semibold">
                                 <i class="fa-solid fa-scale-balanced mt-0.5"></i>
-                                <span>Marco Legal del Descuento</span>
+                                <span>Proporcionalidad Legal</span>
                             </div>
                             <p class="text-gray-400 leading-relaxed">
-                                El descuento pondera el SBA según tu proporción de jornada semanal respecto a las 40 horas ordinarias de referencia.
+                                La aplicación recalcula tu **SBA Real Prorrateado** según tus horas semanales y aplica la fórmula legal de deducción (RD-ley 17/1977).
                             </p>
                         </div>
                     </form>
@@ -186,12 +185,16 @@
                         <!-- Desglose -->
                         <div class="space-y-3 pt-2">
                             <div class="flex justify-between items-center text-sm">
-                                <span class="text-gray-400">Coste diario por jornada huelguística:</span>
+                                <span class="text-gray-400">SBA Real Proporcional (<span id="hoursTagDisplay">24.5h</span>/semana):</span>
+                                <span class="font-bold text-amber-400 font-mono" id="sbaProportionalDisplay">0,00 €</span>
+                            </div>
+                            <div class="flex justify-between items-center text-sm">
+                                <span class="text-gray-400">Coste diario ajustado a tu jornada:</span>
                                 <span class="font-bold text-white" id="dailyCostDisplay">0,00 €</span>
                             </div>
                             <div class="flex justify-between items-center text-sm">
-                                <span class="text-gray-400">Cómputo Anual Base (365 días):</span>
-                                <span class="font-mono text-gray-300" id="sbaBaseDisplay">0,00 €</span>
+                                <span class="text-gray-400">SBA Base 40h introducido:</span>
+                                <span class="font-mono text-gray-400" id="sbaBaseDisplay">0,00 €</span>
                             </div>
                             <div class="flex justify-between items-center text-sm">
                                 <span class="text-gray-400">Impacto aproximado en nómina del mes:</span>
@@ -376,24 +379,27 @@
 
     <!-- Lógica JavaScript de la Aplicación -->
     <script>
-        // Cálculo interactivo de la Calculadora SBA y Horas
+        // Elementos de la Calculadora
         const sbaInput = document.getElementById('sbaInput');
         const weeklyHoursInput = document.getElementById('weeklyHoursInput');
         const strikeDaysInput = document.getElementById('strikeDaysInput');
         
         const totalDiscountDisplay = document.getElementById('totalDiscountDisplay');
+        const sbaProportionalDisplay = document.getElementById('sbaProportionalDisplay');
         const dailyCostDisplay = document.getElementById('dailyCostDisplay');
         const sbaBaseDisplay = document.getElementById('sbaBaseDisplay');
         const netPercentDisplay = document.getElementById('netPercentDisplay');
         const daysSubtext = document.getElementById('daysSubtext');
+        const hoursTagDisplay = document.getElementById('hoursTagDisplay');
 
         function calculateDiscount() {
-            const sba = parseFloat(sbaInput.value) || 0;
+            const sbaFullTime = parseFloat(sbaInput.value) || 0;
             const weeklyHours = parseFloat(weeklyHoursInput.value) || 40;
             const days = parseInt(strikeDaysInput.value) || 1;
 
-            if (sba <= 0) {
+            if (sbaFullTime <= 0) {
                 totalDiscountDisplay.textContent = '0,00 €';
+                sbaProportionalDisplay.textContent = '0,00 €';
                 dailyCostDisplay.textContent = '0,00 €';
                 sbaBaseDisplay.textContent = '0,00 €';
                 netPercentDisplay.textContent = '0,00%';
@@ -401,29 +407,38 @@
                 return;
             }
 
-            // Factor de corrección por jornada parcial (SBA teórico ajustado a las horas de contrato vs 40h estándar)
-            const jornadaFactor = weeklyHours / 40;
-            const sbaAjustado = sba * jornadaFactor;
+            // 1. Proporción de horas (Ej: 24.5 / 40 = 0.6125)
+            const hoursRatio = Math.min(weeklyHours / 40, 1);
 
-            // Coste diario legal: SBA ajustado / 365 días
-            const dailyCost = sbaAjustado / 365;
-            const totalDiscount = dailyCost * days;
-            
-            // Estimación de sueldo mensual bruto medio para el contrato introducido
-            const approxMonthlyGross = sbaAjustado / 12;
-            const impactPercentage = (totalDiscount / approxMonthlyGross) * 100;
+            // 2. Salario Bruto Anual REAL según horas contratadas
+            const actualSbaProportional = sbaFullTime * hoursRatio;
 
-            // Renderizar resultados formateados
+            // 3. Descuento por día basado en el SBA real de la jornada contratada (SBA_real / 365)
+            const actualDailyCost = actualSbaProportional / 365;
+            const totalDiscount = actualDailyCost * days;
+
+            // 4. Salario mensual bruto real de la persona (SBA_real / 12)
+            const actualMonthlyGross = actualSbaProportional / 12;
+            const impactPercentage = (totalDiscount / actualMonthlyGross) * 100;
+
+            // Renderizado interactivo
             totalDiscountDisplay.textContent = `${totalDiscount.toFixed(2)} €`;
-            dailyCostDisplay.textContent = `${dailyCost.toFixed(2)} €`;
-            sbaBaseDisplay.textContent = `${sba.toLocaleString('es-ES', { minimumFractionDigits: 2 })} €`;
-            netPercentDisplay.textContent = `~${impactPercentage.toFixed(1)}% de 1 mensualidad`;
-            daysSubtext.textContent = `Para ${days} jornada(s) de huelga (${days} x ${dailyCost.toFixed(2)}€)`;
+            sbaProportionalDisplay.textContent = `${actualSbaProportional.toLocaleString('es-ES', { minimumFractionDigits: 2, maximumFractionDigits: 2 })} €`;
+            dailyCostDisplay.textContent = `${actualDailyCost.toFixed(2)} €`;
+            sbaBaseDisplay.textContent = `${sbaFullTime.toLocaleString('es-ES', { minimumFractionDigits: 2, maximumFractionDigits: 2 })} €`;
+            
+            hoursTagDisplay.textContent = `${weeklyHours}h`;
+            netPercentDisplay.textContent = `~${impactPercentage.toFixed(1)}% de tu nómina mensual`;
+            daysSubtext.textContent = `Para ${days} jornada(s) de huelga (${days} × ${actualDailyCost.toFixed(2)}€)`;
         }
 
+        // Event listeners para actualizar al instante
         sbaInput.addEventListener('input', calculateDiscount);
         weeklyHoursInput.addEventListener('input', calculateDiscount);
         strikeDaysInput.addEventListener('input', calculateDiscount);
+
+        // Inicialización al cargar la página
+        calculateDiscount();
 
         // FAQ Toggle Accordion
         function toggleFaq(button) {
@@ -462,7 +477,6 @@
             const tipo = document.getElementById('incTipo').value;
             const desc = document.getElementById('incDesc').value;
 
-            // UI Loading state
             submitBtn.disabled = true;
             submitBtn.innerHTML = `<i class="fa-solid fa-spinner animate-spin"></i> Enviando a CGT...`;
             statusAlert.className = 'hidden';
@@ -501,7 +515,7 @@
             }
         });
 
-        // Función para copiar reporte estructurado al portapapeles
+        // Copiar reporte al portapapeles
         function copyReportToClipboard() {
             const nombre = document.getElementById('incNombre').value || 'Anónimo';
             const area = document.getElementById('incArea').value || 'No especificado';
